@@ -10,34 +10,52 @@ namespace RoamingDataStore
 {
     public class GameEngine
     {
-        private enum SlotStatus
-        {
-            Empty, Red, White
-        }
+
         public static GameMoveResult TestGuessAgainstSolution(Move _guess, Move _solution)
         {
-
-            var SlotOneStatus = SlotStatus.Empty;
-            var SlotTwoStatus = SlotStatus.Empty;
-            var SlotThreeStatus = SlotStatus.Empty;
-            var SlotFourStatus = SlotStatus.Empty;
-
-
-            if (_guess.SlotOne == _solution.SlotOne) SlotOneStatus = SlotStatus.Red;
-            if (_guess.SlotTwo == _solution.SlotTwo) SlotTwoStatus = SlotStatus.Red;
-            if (_guess.SlotThree == _solution.SlotThree) SlotThreeStatus = SlotStatus.Red;
-            if (_guess.SlotFour == _solution.SlotFour) SlotFourStatus = SlotStatus.Red;
-
-
-
             // calculcate everything
             GameMoveResult result = new GameMoveResult();
-            if (SlotOneStatus == SlotStatus.Red) result.NumberOfReds += 1;
-            if (SlotTwoStatus == SlotStatus.Red) result.NumberOfReds += 1;
-            if (SlotThreeStatus == SlotStatus.Red) result.NumberOfReds += 1;
-            if (SlotFourStatus == SlotStatus.Red) result.NumberOfReds += 1;
-
+            var _guessString = string.Join("", _guess.Slots.Select(s => s.ColorCode));
+            var _solutionString = string.Join("", _solution.Slots.Select(s => s.ColorCode));
+            var _check = CheckGuess(_solutionString, _guessString);
+            result.NumberOfReds = _check.ToCharArray().Count(c => c == '+');
+            result.NumberOfWhites = _check.ToCharArray().Count(c => c == '-');
+            result.NumberOfEmpties = _check.ToCharArray().Count(c => c == 'X');
             return result;
+        }
+
+        public static string CheckGuess(string code, string guess)
+        {
+            char[] array = code.ToCharArray();
+            int num = 0;
+            char[] array2 = new char[]
+	        {
+		        'X',
+		        'X',
+		        'X',
+		        'X'
+	        };
+            for (int i = 0; i < 4; i++)
+            {
+                char guessChar = guess[i];
+                int num2 = Array.FindIndex<char>(array, (char codeChar) => codeChar == guessChar);
+                if (num2 > -1)
+                {
+                    array2[num] = GetMarker(num2, i);
+                    num++;
+                    array[num2] = 'X';
+                }
+            }
+            return new string(array2);
+        }
+
+        private static char GetMarker(int searchIndex, int guessIndex)
+        {
+            if (searchIndex != guessIndex)
+            {
+                return '-';
+            }
+            return '+';
         }
 
         private Game _game;

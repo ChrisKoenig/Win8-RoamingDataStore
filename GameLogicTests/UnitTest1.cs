@@ -13,8 +13,16 @@ namespace GameLogicTests
         [TestMethod]
         public void TestExactSolution()
         {
-            Move _guess = new Move() { SlotOne = ColorSelection.Blue, SlotTwo = ColorSelection.Orange, SlotThree = ColorSelection.Red, SlotFour = ColorSelection.White };
-            Move _solution = new Move() { SlotOne = ColorSelection.Blue, SlotTwo = ColorSelection.Orange, SlotThree = ColorSelection.Red, SlotFour = ColorSelection.White };
+            Move _guess = new Move(
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Red"),
+                ColorSelection.FindColorSwatchByColorName("White"));
+            Move _solution = new Move(
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Red"),
+                ColorSelection.FindColorSwatchByColorName("White"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
             Assert.AreEqual<int>(result.NumberOfReds, 4);
             Assert.AreEqual<int>(result.NumberOfWhites, 0);
@@ -25,19 +33,20 @@ namespace GameLogicTests
         public void TestTwoRedOneWhite()
         {
             Move _guess = new Move(
-                ColorSelection.Blue, 
-                ColorSelection.Orange, 
-                ColorSelection.Red, 
-                ColorSelection.White);
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Red"),
+                ColorSelection.FindColorSwatchByColorName("White"));
             Move _solution = new Move(
-                ColorSelection.Blue, 
-                ColorSelection.Orange, 
-                ColorSelection.Yellow, 
-                ColorSelection.Red);
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Yellow"),
+                ColorSelection.FindColorSwatchByColorName("Red"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
             Assert.AreEqual<int>(result.NumberOfReds, 2);
             Assert.AreEqual<int>(result.NumberOfWhites, 1);
-            Assert.IsTrue(result.IsSolved);
+            Assert.AreEqual<int>(result.NumberOfEmpties, 1);
+            Assert.IsFalse(result.IsSolved);
         }
     }
 }

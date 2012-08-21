@@ -8,8 +8,19 @@ namespace RoamingDataStore
     public class GameMoveResult : ObservableObject
     {
         // Fields...
+        private int _NumberOfEmpties;
         private int _NumberOfReds;
         private int _NumberOfWhites;
+
+
+        public int NumberOfEmpties
+        {
+            get { return _NumberOfEmpties; }
+            set
+            {
+                _NumberOfEmpties = value;
+            }
+        }
 
         public int NumberOfWhites
         {
@@ -20,7 +31,6 @@ namespace RoamingDataStore
                 RaisePropertyChanged(() => this.NumberOfWhites);
             }
         }
-
 
         public int NumberOfReds
         {

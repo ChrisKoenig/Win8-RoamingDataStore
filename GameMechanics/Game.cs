@@ -22,13 +22,13 @@ namespace RoamingDataStore
         private void GenerateSolution()
         {
             Random random = new Random();
-            _solution = new Move()
-            {
-                SlotOne = (ColorSelection)random.Next(0, 3),
-                SlotTwo = (ColorSelection)random.Next(0, 3),
-                SlotThree = (ColorSelection)random.Next(0, 3),
-                SlotFour = (ColorSelection)random.Next(0, 3),
-            };
+            int min = 0;
+            int max = ColorSelection.ColorSwatches.Count();
+            _solution = new Move(
+                ColorSelection.ColorSwatches[random.Next(min, max)],
+                ColorSelection.ColorSwatches[random.Next(min, max)],
+                ColorSelection.ColorSwatches[random.Next(min, max)],
+                ColorSelection.ColorSwatches[random.Next(min, max)]);
         }
 
         public ObservableCollection<Move> Moves { get; set; }
