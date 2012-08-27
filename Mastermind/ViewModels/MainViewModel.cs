@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GameLogic;
+using Mastermind.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.Storage;
 
 namespace Mastermind.ViewModels
 {
@@ -84,9 +87,13 @@ namespace Mastermind.ViewModels
 
         #endregion
 
-        private readonly Game _game;
+        private Game _game;
         public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
         public RelayCommand SubmitGuessCommand { get; private set; }
+
+
+        private readonly ApplicationDataContainer _roamingSettings = ApplicationData.Current.RoamingSettings;
+        private readonly StorageFolder _roamingFolder = ApplicationData.Current.RoamingFolder;
 
         public MainViewModel()
         {
@@ -104,6 +111,15 @@ namespace Mastermind.ViewModels
             ToggleButonFourCommand = new RelayCommand(() => MoveSlotFour = CycleColor(MoveSlotFour));
 
             _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
+
+            ApplicationData.Current.DataChanged += DataChangeHandler;
+
+        }
+
+        private async void DataChangeHandler(ApplicationData appData, object o)
+        {
+            // TODO: Refresh your data from storage
+            _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, "game.json");
         }
 
         private string CycleColor(string ColorCode)

@@ -73,6 +73,7 @@
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
+                                        <!-- How do I get the items to be closer together? -->
                                         <Grid Margin="0">
                                             <Ellipse Width="8" Height="8" Fill="{Binding PinColor}" Margin="0"/>
                                         </Grid>
