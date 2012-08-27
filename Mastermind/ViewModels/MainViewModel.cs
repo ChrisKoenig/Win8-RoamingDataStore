@@ -14,6 +14,8 @@ namespace Mastermind.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
+        private const string STR_Gamejson = "game.json";
+        private const string STR_Movesjson = "moves.json";
 
         #region Backing Stores
 
@@ -92,6 +94,7 @@ namespace Mastermind.ViewModels
         public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
         public RelayCommand SubmitGuessCommand { get; private set; }
 
+
         public MainViewModel()
         {
             Moves = new ObservableCollection<PlayerMoveViewModel>();
@@ -118,6 +121,7 @@ namespace Mastermind.ViewModels
             IsBusy = true;
             _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
             Moves.Clear();
+            SaveState();
             IsBusy = false;
         }
 
@@ -125,12 +129,12 @@ namespace Mastermind.ViewModels
         {
             IsBusy = true;
 
-            _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, "game.json");
-            Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, "moves.json");
-            MoveSlotOne = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
-            MoveSlotTwo = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
-            MoveSlotThree = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
-            MoveSlotFour = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+            _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
+            Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
+            MoveSlotOne =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
+            MoveSlotTwo =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
+            MoveSlotThree =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
+            MoveSlotFour =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
 
             IsBusy = false;
         }
@@ -170,6 +174,18 @@ namespace Mastermind.ViewModels
 
             Moves.Add(pvm);
 
+            SaveState();
+        }
+
+        private void SaveState()
+        {
+            var appData = ApplicationData.Current;
+            StorageHelper.SaveObjectToRoamingFolder(appData, STR_Gamejson, _game);
+            StorageHelper.SaveObjectToRoamingFolder(appData, STR_Movesjson, Moves);
+            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotOne", MoveSlotOne);
+            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotTwo", MoveSlotTwo);
+            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotThree", MoveSlotThree);
+            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotFour", MoveSlotFour);
         }
 
         public bool GameLocked
