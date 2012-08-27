@@ -21,7 +21,7 @@ namespace Mastermind.ViewModels
         private string _MoveSlotOne;
 
         #endregion
-        
+
         #region MoveSlot Properties
 
         public string MoveSlotOne
@@ -75,29 +75,42 @@ namespace Mastermind.ViewModels
 
         #endregion
 
-        private Game _game;
-
+        private readonly Game _game;
         public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
-        public RelayCommand RecordMoveCommand { get; private set; }
-        
+        public RelayCommand SubmitGuessCommand { get; private set; }
+        public RelayCommand ToggleButonFourCommand { get; private set; }
+
         public MainViewModel()
         {
             Moves = new ObservableCollection<PlayerMoveViewModel>();
-            RecordMoveCommand = new RelayCommand(() => RecordMove());
-            _game = GameEngine.CreateGame(new Action(OnVictory), new Action(OnFailure));
+            SubmitGuessCommand = new RelayCommand(() => SubmitGuess());
+
+            MoveSlotOne = "R";
+            MoveSlotTwo = "R";
+            MoveSlotThree = "R";
+            MoveSlotFour = "R";
+
+            ToggleButonFourCommand = new RelayCommand(() => MoveSlotFour = CycleColor(MoveSlotFour));
+            _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
+        }
+
+        private string CycleColor(string ColorCode)
+        {
+            string newColor = ColorSelection.GetNextColor(ColorCode);
+            return newColor;
         }
 
         private void OnVictory()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void OnFailure()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        private void RecordMove()
+        private void SubmitGuess()
         {
             var pvm = new PlayerMoveViewModel();
 
@@ -116,13 +129,5 @@ namespace Mastermind.ViewModels
 
         }
 
-        private void ShowVictory()
-        {
-        }
-
-        private void ShowFailure()
-        {
-        }
-    
     }
 }

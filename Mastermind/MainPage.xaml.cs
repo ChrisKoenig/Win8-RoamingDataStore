@@ -34,5 +34,6 @@ namespace Mastermind
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
+
     }
 }

@@ -59,7 +59,7 @@ namespace GameLogic
             return new Game(solution, doVictory, doFailure);
         }
 
-        public static Game CreateGame(Action doVictory, Action doFailure)
+        public static Game CreateRandomGame(Action doVictory, Action doFailure)
         {
             return new Game(doVictory, doFailure);
         }

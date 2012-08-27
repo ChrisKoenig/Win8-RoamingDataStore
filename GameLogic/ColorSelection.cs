@@ -37,5 +37,28 @@ namespace GameLogic
             return ColorSwatches.Single(swatch => swatch.ColorColor.Equals(color));
         }
 
+
+        public static string GetNextColor(string ColorCode)
+        {
+            // find swatch for selected color code
+            var swatch = ColorSwatches.Single(s => s.ColorCode == ColorCode);
+
+            // find index of swatch
+            var index = Array.IndexOf(ColorSwatches, swatch);
+
+            // add one to index
+            index++;
+
+            // if index > number of colors, reset to 0
+            if (index > ColorSwatches.Count() - 1)
+                index = 0;
+
+            // pull color string from selected color
+            var newSwatch = ColorSwatches[index];
+
+            // return the result
+            return newSwatch.ColorCode;
+
+        }
     }
 }

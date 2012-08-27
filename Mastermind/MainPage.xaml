@@ -5,7 +5,8 @@
     xmlns:local="using:Mastermind"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding Path=Main, Source={StaticResource Locator}}">
     <Page.Resources>
         <Style TargetType="Button" x:Key="GuessButton">
             <Setter Property="BorderThickness" Value="0" />
@@ -13,7 +14,8 @@
             <Setter Property="Height" Value="173" />
             <Setter Property="Margin" Value="10" />
         </Style>
-        <Style TargetType="Button" x:Key="SubmitButton" BasedOn="{StaticResource GuessButton}">
+        <Style TargetType="Button" x:Key="SubmitButton" 
+               BasedOn="{StaticResource GuessButton}">
             <Setter Property="BorderThickness" Value="2" />
         </Style>
     </Page.Resources>
@@ -26,11 +28,11 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" x:Name="SelectionArea">
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonOne" Background="{Binding SelectorButtonOneColor}" Command="{Binding ToggleSelectorButtonOneColor}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonTwo" Background="{Binding SelectorButtonTwoColor}" Command="{Binding ToggleSelectorButtonTwoColor}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonThree" Background="{Binding SelectorButtonThreeColor}" Command="{Binding ToggleSelectorButtonThreeColor}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonFour" Background="{Binding SelectorButtonFourColor}" Command="{Binding ToggleSelectorButtonFourColor}" />
-                <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuess}" />
+                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonOne" Background="{Binding MoveSlotOne}" />
+                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonTwo" Background="{Binding MoveSlotTwo}" />
+                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonThree" Background="{Binding MoveSlotThree}" />
+                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonFour" Background="{Binding MoveSlotFour}" Command="{Binding ToggleButtonFourCommand}" />
+                <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuessCommand}"/>
             </StackPanel>
 
             <ListBox x:Name="GameHistory" ItemsSource="{Binding Guesses}">
