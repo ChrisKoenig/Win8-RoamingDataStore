@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Threading;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,6 +58,7 @@ namespace Mastermind
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+                DispatcherHelper.Initialize();
             }
 
             if (rootFrame.Content == null)

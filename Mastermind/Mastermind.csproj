@@ -123,6 +123,7 @@
     <Compile Include="Messages\VictoryMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\PinViewModel.cs" />
     <Compile Include="ViewModels\PlayerMoveViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
   </ItemGroup>

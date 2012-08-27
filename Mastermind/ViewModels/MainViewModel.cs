@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using GameLogic;
 using Mastermind.Helpers;
 using Mastermind.Messages;
@@ -131,10 +132,10 @@ namespace Mastermind.ViewModels
 
             _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
             Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
-            MoveSlotOne =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
-            MoveSlotTwo =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
-            MoveSlotThree =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
-            MoveSlotFour =  StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+            MoveSlotOne = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
+            MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
+            MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
+            MoveSlotFour = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
 
             IsBusy = false;
         }
@@ -172,7 +173,7 @@ namespace Mastermind.ViewModels
             pvm.MoveData = guess;
             pvm.ResultData = result;
 
-            Moves.Add(pvm);
+            DispatcherHelper.CheckBeginInvokeOnUI(() => Moves.Add(pvm));
 
             SaveState();
         }
@@ -213,6 +214,6 @@ namespace Mastermind.ViewModels
                 RaisePropertyChanged(() => IsBusy);
             }
         }
-        
+
     }
 }

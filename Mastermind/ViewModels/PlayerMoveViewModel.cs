@@ -9,28 +9,6 @@ using Windows.UI.Xaml.Media;
 
 namespace Mastermind.ViewModels
 {
-    public class PinViewModel : ObservableObject
-    {
-        private SolidColorBrush _PinColor;
-
-        public SolidColorBrush PinColor
-        {
-            get { return _PinColor; }
-            set
-            {
-                if (_PinColor == value)
-                    return;
-                _PinColor = value;
-                RaisePropertyChanged(() => this.PinColor);
-            }
-        }
-        
-        public PinViewModel(Color color)
-        {
-            PinColor = new SolidColorBrush(color);
-        }
-    }
-
     public class PlayerMoveViewModel : ObservableObject
     {
         // Fields...
@@ -62,12 +40,12 @@ namespace Mastermind.ViewModels
                 Results = new ObservableCollection<PinViewModel>();
                 for (int i = 0; i < value.NumberOfReds; i++)
                 {
-                    Results.Add(new PinViewModel(Colors.Red));
+                    Results.Add(new PinViewModel("Red"));
                 }
                 for (int i = 0; i < value.NumberOfWhites; i++)
                 {
-                    Results.Add(new PinViewModel(Colors.White));
-                } 
+                    Results.Add(new PinViewModel("White"));
+                }
                 RaisePropertyChanged(() => this.ResultData);
             }
         }
