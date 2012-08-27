@@ -70,7 +70,7 @@ namespace GameLogic.Tests
 
             GameMoveResult result = new GameMoveResult();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < Game.MAX_MOVES_ALLOWED; i++)
             {
                 result = game.RecordGuess(_guess);                
             }

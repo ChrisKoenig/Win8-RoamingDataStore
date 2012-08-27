@@ -33,15 +33,15 @@ namespace GameLogic
             }
             doVictoryAction = doVictory;
             doFailureAction = doFailure;
-            NumberOfMovesAllowed = 10;
             Moves = new List<GameMove>();
         }
+
+        public static int MAX_MOVES_ALLOWED = 12;
 
         private GameMove _solution;
         private Action doVictoryAction;
         private Action doFailureAction;
         public List<GameMove> Moves { get; set; }
-        public int NumberOfMovesAllowed { get; set; }
 
         private void GenerateSolution()
         {
@@ -58,7 +58,7 @@ namespace GameLogic
         {
             get
             {
-                return NumberOfMovesAllowed - Moves.Count;
+                return Game.MAX_MOVES_ALLOWED - Moves.Count;
             }
         }
 
@@ -73,7 +73,7 @@ namespace GameLogic
             }
             else
             {
-                if (Moves.Count >= NumberOfMovesAllowed)
+                if (Moves.Count >= Game.MAX_MOVES_ALLOWED)
                 {
                     doFailureAction.Invoke();
                 }
