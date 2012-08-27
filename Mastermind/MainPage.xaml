@@ -45,7 +45,7 @@
                 <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuessCommand}"/>
             </StackPanel>
 
-            <ListBox x:Name="GameHistory" ItemsSource="{Binding Moves}">
+            <ListBox x:Name="GameHistory" ItemsSource="{Binding Moves}" Background="SlateGray">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -59,26 +59,26 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
-                                <RowDefinition />
+                                <RowDefinition Height="24" />
                             </Grid.RowDefinitions>
                             <Rectangle Grid.Row="0" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[0].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
                             <Rectangle Grid.Row="1" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[1].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
                             <Rectangle Grid.Row="2" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[2].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
                             <Rectangle Grid.Row="3" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[3].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
-                            <Grid Grid.Row="4">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Red" Grid.Column="0" Grid.Row="0" />
-                                <TextBlock Text="{Binding Path=ResultData.NumberOfReds}" Grid.Column="1" Grid.Row="0" />
-                                <TextBlock Text="White" Grid.Column="0" Grid.Row="1" />
-                                <TextBlock Text="{Binding Path=ResultData.NumberOfWhites}" Grid.Column="1" Grid.Row="1" />
-                            </Grid>
+                            <ListBox Grid.Row="4" ItemsSource="{Binding Results}" Background="Transparent">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0">
+                                            <Ellipse Width="8" Height="8" Fill="{Binding PinColor}" Margin="0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
