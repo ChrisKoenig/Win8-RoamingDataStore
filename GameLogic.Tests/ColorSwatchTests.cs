@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace GameLogic.Tests
 {
@@ -28,5 +29,29 @@ namespace GameLogic.Tests
             Assert.AreEqual<string>(expectedNext, actualNext);
         }
 
+        [TestMethod]
+        public void ConvertCodeToColor()
+        {
+            string theCode = "R";
+            ColorSelection swatch = ColorSelection.FindColorSwatchByColorCode(theCode);
+            Assert.AreEqual<Color>(swatch.ColorColor, Colors.Red);
+        }
+
+        [TestMethod]
+        public void ConvertNameToColor()
+        {
+            string theName = "Red";
+            ColorSelection swatch = ColorSelection.FindColorSwatchByColorName(theName);
+            Assert.AreEqual<Color>(swatch.ColorColor, Colors.Red);
+        }
+
+
+        [TestMethod]
+        public void ConvertColorToCode()
+        {
+            Color theColor = Colors.Red;
+            ColorSelection swatch = ColorSelection.FindColorSwatchByColorColor(theColor);
+            Assert.AreEqual<string>(swatch.ColorCode, "R");
+        }
     }
 }

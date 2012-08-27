@@ -32,7 +32,7 @@ namespace GameLogic
             return ColorSwatches.Single(color => color.ColorName == name);
         }
 
-        public static ColorSelection FindColorSwatchByColorName(Color color)
+        public static ColorSelection FindColorSwatchByColorColor(Color color)
         {
             return ColorSwatches.Single(swatch => swatch.ColorColor.Equals(color));
         }
@@ -60,5 +60,6 @@ namespace GameLogic
             return newSwatch.ColorCode;
 
         }
+
     }
 }

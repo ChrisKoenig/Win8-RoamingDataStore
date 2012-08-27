@@ -75,10 +75,18 @@ namespace Mastermind.ViewModels
 
         #endregion
 
+        #region ToggleButton Commands
+
+        public RelayCommand ToggleButonOneCommand { get; private set; }
+        public RelayCommand ToggleButonTwoCommand { get; private set; }
+        public RelayCommand ToggleButonThreeCommand { get; private set; }
+        public RelayCommand ToggleButonFourCommand { get; private set; }
+
+        #endregion
+
         private readonly Game _game;
         public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
         public RelayCommand SubmitGuessCommand { get; private set; }
-        public RelayCommand ToggleButonFourCommand { get; private set; }
 
         public MainViewModel()
         {
@@ -90,7 +98,11 @@ namespace Mastermind.ViewModels
             MoveSlotThree = "R";
             MoveSlotFour = "R";
 
+            ToggleButonOneCommand = new RelayCommand(() => MoveSlotOne = CycleColor(MoveSlotOne));
+            ToggleButonTwoCommand = new RelayCommand(() => MoveSlotTwo = CycleColor(MoveSlotTwo));
+            ToggleButonThreeCommand = new RelayCommand(() => MoveSlotThree = CycleColor(MoveSlotThree));
             ToggleButonFourCommand = new RelayCommand(() => MoveSlotFour = CycleColor(MoveSlotFour));
+
             _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
         }
 

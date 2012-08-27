@@ -6,7 +6,26 @@ namespace GameLogic
 {
     public class Game
     {
+
+        public Game()
+        {
+        }
+
         public Game(Action doVictory, Action doFailure)
+        {
+            InitBasicGame(doVictory, doFailure);
+            GenerateSolution();
+        }
+
+
+        internal Game(GameMove solution, Action doVictory, Action doFailure)
+            : this(doVictory, doFailure)
+        {
+            InitBasicGame(doVictory, doFailure);
+            _solution = solution;
+        }
+
+        private void InitBasicGame(Action doVictory, Action doFailure)
         {
             if (doVictory == null || doFailure == null)
             {
@@ -14,26 +33,13 @@ namespace GameLogic
             }
             doVictoryAction = doVictory;
             doFailureAction = doFailure;
-            GenerateSolution();
+            NumberOfMovesAllowed = 10;
             Moves = new List<GameMove>();
         }
 
-        internal Game(GameMove solution, Action doVictory, Action doFailure)
-        {
-            // TODO: Complete member initialization
-            _solution = solution;
-            if (doVictory == null || doFailure == null)
-            {
-                throw new ArgumentException("Must supply values for both doVictory and doFailure");
-            }
-            doVictoryAction = doVictory;
-            doFailureAction = doFailure;
-            Moves = new List<GameMove>();  
-        }
-
         private GameMove _solution;
-        private readonly Action doVictoryAction;
-        private readonly Action doFailureAction;
+        private Action doVictoryAction;
+        private Action doFailureAction;
         public List<GameMove> Moves { get; set; }
         public int NumberOfMovesAllowed { get; set; }
 
