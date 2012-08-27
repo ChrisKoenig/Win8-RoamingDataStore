@@ -10,6 +10,14 @@
     DataContext="{Binding Path=Main, Source={StaticResource Locator}}">
     <Page.Resources>
         <converters:CodeToColorConverter x:Key="CodeToColorConverter" />
+        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+        <Style x:Key="MoveRectangle" TargetType="Rectangle">
+            <Setter Property="RadiusX" Value="10" />
+            <Setter Property="RadiusY" Value="10" />
+            <Setter Property="Margin" Value="12" />
+            <Setter Property="Width" Value="96" />
+            <Setter Property="Height" Value="96" />
+        </Style>
         <Style TargetType="Button" x:Key="GuessButton">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Width" Value="173" />
@@ -37,16 +45,38 @@
                 <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuessCommand}"/>
             </StackPanel>
 
-            <ListBox x:Name="GameHistory" ItemsSource="{Binding Guesses}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel>
-                            <StackPanel.RenderTransform>
-                                <RotateTransform Angle="90" />
-                            </StackPanel.RenderTransform>
-                        </StackPanel>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+            <ListBox x:Name="GameHistory" ItemsSource="{Binding Moves}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Grid.Column="0" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[0].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Column="1" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[1].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Column="2" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[2].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Column="3" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[3].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Grid Grid.Column="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Red" Grid.Column="0" Grid.Row="0" />
+                                <TextBlock Text="{Binding Path=ResultData.NumberOfReds}" Grid.Column="1" Grid.Row="0" />
+                                <TextBlock Text="White" Grid.Column="0" Grid.Row="1" />
+                                <TextBlock Text="{Binding Path=ResultData.NumberOfWhites}" Grid.Column="1" Grid.Row="1" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
 
         </Grid>
