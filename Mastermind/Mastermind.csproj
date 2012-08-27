@@ -118,6 +118,9 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Messages\FailureMessage.cs" />
+    <Compile Include="Messages\StartNewGameMessage.cs" />
+    <Compile Include="Messages\VictoryMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PlayerMoveViewModel.cs" />

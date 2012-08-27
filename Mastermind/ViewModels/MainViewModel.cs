@@ -1,14 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using GameLogic;
 using Mastermind.Helpers;
+using Mastermind.Messages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Storage;
 
 namespace Mastermind.ViewModels
@@ -18,6 +17,8 @@ namespace Mastermind.ViewModels
 
         #region Backing Stores
 
+        private bool _IsBusy;
+        private bool _GameLocked;
         private string _MoveSlotFour;
         private string _MoveSlotThree;
         private string _MoveSlotTwo;
@@ -91,10 +92,6 @@ namespace Mastermind.ViewModels
         public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
         public RelayCommand SubmitGuessCommand { get; private set; }
 
-
-        private readonly ApplicationDataContainer _roamingSettings = ApplicationData.Current.RoamingSettings;
-        private readonly StorageFolder _roamingFolder = ApplicationData.Current.RoamingFolder;
-
         public MainViewModel()
         {
             Moves = new ObservableCollection<PlayerMoveViewModel>();
@@ -110,16 +107,32 @@ namespace Mastermind.ViewModels
             ToggleButonThreeCommand = new RelayCommand(() => MoveSlotThree = CycleColor(MoveSlotThree));
             ToggleButonFourCommand = new RelayCommand(() => MoveSlotFour = CycleColor(MoveSlotFour));
 
-            _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
-
             ApplicationData.Current.DataChanged += DataChangeHandler;
 
+            Messenger.Default.Register<StartNewGameMessage>(this, (message) => StartNewGame());
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            IsBusy = true;
+            _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
+            Moves.Clear();
+            IsBusy = false;
         }
 
         private async void DataChangeHandler(ApplicationData appData, object o)
         {
-            // TODO: Refresh your data from storage
+            IsBusy = true;
+
             _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, "game.json");
+            Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, "moves.json");
+            MoveSlotOne = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
+            MoveSlotTwo = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
+            MoveSlotThree = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
+            MoveSlotFour = await StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+
+            IsBusy = false;
         }
 
         private string CycleColor(string ColorCode)
@@ -130,12 +143,14 @@ namespace Mastermind.ViewModels
 
         private void OnVictory()
         {
-            //throw new NotImplementedException();
+            Messenger.Default.Send<VictoryMessage>(new VictoryMessage());
+            GameLocked = true;
         }
 
         private void OnFailure()
         {
-            //throw new NotImplementedException();
+            Messenger.Default.Send<FailureMessage>(new FailureMessage());
+            GameLocked = true;
         }
 
         private void SubmitGuess()
@@ -157,5 +172,31 @@ namespace Mastermind.ViewModels
 
         }
 
+        public bool GameLocked
+        {
+            get
+            {
+                return _GameLocked;
+            }
+            set
+            {
+                _GameLocked = value;
+                RaisePropertyChanged(() => this.GameLocked);
+            }
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return _IsBusy;
+            }
+            set
+            {
+                _IsBusy = value;
+                RaisePropertyChanged(() => IsBusy);
+            }
+        }
+        
     }
 }

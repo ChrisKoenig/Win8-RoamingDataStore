@@ -23,5 +23,11 @@ namespace Mastermind.Helpers
             await FileIO.WriteTextAsync(sampleFile, jsonData);
         }
 
+        public async static Task<T> GetObjectFromSetting<T>(ApplicationData appData, string setting)
+        {
+            var raw = appData.RoamingSettings.Values[setting];
+            T obj = (T)raw;
+            return obj;
+        }
     }
 }
