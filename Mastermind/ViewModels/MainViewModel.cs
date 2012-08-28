@@ -6,9 +6,8 @@ using GameLogic;
 using Mastermind.Helpers;
 using Mastermind.Messages;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Diagnostics;
 using Windows.Storage;
 
 namespace Mastermind.ViewModels
@@ -27,7 +26,7 @@ namespace Mastermind.ViewModels
         private string _MoveSlotTwo;
         private string _MoveSlotOne;
 
-        #endregion
+        #endregion Backing Stores
 
         #region MoveSlot Properties
 
@@ -67,7 +66,6 @@ namespace Mastermind.ViewModels
             }
         }
 
-
         public string MoveSlotFour
         {
             get { return _MoveSlotFour; }
@@ -80,21 +78,25 @@ namespace Mastermind.ViewModels
             }
         }
 
-        #endregion
+        #endregion MoveSlot Properties
 
         #region ToggleButton Commands
 
         public RelayCommand ToggleButonOneCommand { get; private set; }
+
         public RelayCommand ToggleButonTwoCommand { get; private set; }
+
         public RelayCommand ToggleButonThreeCommand { get; private set; }
+
         public RelayCommand ToggleButonFourCommand { get; private set; }
 
-        #endregion
+        #endregion ToggleButton Commands
 
         private Game _game;
-        public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
-        public RelayCommand SubmitGuessCommand { get; private set; }
 
+        public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
+
+        public RelayCommand SubmitGuessCommand { get; private set; }
 
         public MainViewModel()
         {
@@ -114,29 +116,29 @@ namespace Mastermind.ViewModels
             ApplicationData.Current.DataChanged += DataChangeHandler;
 
             Messenger.Default.Register<StartNewGameMessage>(this, (message) => StartNewGame());
+
             StartNewGame();
         }
 
         private void StartNewGame()
         {
             IsBusy = true;
+            ClearSavedGameState();
             _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
             Moves.Clear();
-            SaveState();
+            SaveGameState();
             IsBusy = false;
         }
 
         private async void DataChangeHandler(ApplicationData appData, object o)
         {
             IsBusy = true;
-
             _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
             Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
             MoveSlotOne = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
             MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
             MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
             MoveSlotFour = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
-
             IsBusy = false;
         }
 
@@ -148,14 +150,21 @@ namespace Mastermind.ViewModels
 
         private void OnVictory()
         {
+            ClearSavedGameState();
             Messenger.Default.Send<VictoryMessage>(new VictoryMessage());
             GameLocked = true;
         }
 
         private void OnFailure()
         {
+            ClearSavedGameState();
             Messenger.Default.Send<FailureMessage>(new FailureMessage());
             GameLocked = true;
+        }
+
+        private async void ClearSavedGameState()
+        {
+            StorageHelper.ClearGameState();
         }
 
         private void SubmitGuess()
@@ -175,10 +184,10 @@ namespace Mastermind.ViewModels
 
             DispatcherHelper.CheckBeginInvokeOnUI(() => Moves.Add(pvm));
 
-            SaveState();
+            SaveGameState();
         }
 
-        private void SaveState()
+        private void SaveGameState()
         {
             var appData = ApplicationData.Current;
             StorageHelper.SaveObjectToRoamingFolder(appData, STR_Gamejson, _game);
@@ -214,6 +223,5 @@ namespace Mastermind.ViewModels
                 RaisePropertyChanged(() => IsBusy);
             }
         }
-
     }
 }

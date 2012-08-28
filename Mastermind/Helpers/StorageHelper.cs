@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -33,6 +34,27 @@ namespace Mastermind.Helpers
         public static void PutObjectToSetting<T>(ApplicationData appData, string key, T value)
         {
             appData.RoamingSettings.Values[key] = value;
+        }
+
+        internal static async void ClearGameState()
+        {
+            var appData = ApplicationData.Current;
+            try
+            {
+                foreach (var item in appData.RoamingSettings.Values)
+                {
+                    appData.RoamingSettings.Values.Remove(item.Key);
+                }
+                var files = await appData.RoamingFolder.GetFilesAsync();
+                foreach (var file in files)
+                {
+                    await file.DeleteAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
     }
 }
