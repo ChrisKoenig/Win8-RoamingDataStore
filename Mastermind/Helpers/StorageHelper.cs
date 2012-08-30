@@ -10,6 +10,8 @@ namespace Mastermind.Helpers
 {
     public class StorageHelper
     {
+        private static string GAME_IN_PROGRESS = "GAME_IN_PROGRESS";
+
         public async static Task<T> GetObjectFromRoamingFolder<T>(string filename)
         {
             return await GetObjectFromRoamingFolder<T>(ApplicationData.Current, filename);
@@ -51,6 +53,7 @@ namespace Mastermind.Helpers
 
         public static async void ClearGameState()
         {
+            SetGameOver();
             var appData = ApplicationData.Current;
             try
             {
@@ -76,9 +79,22 @@ namespace Mastermind.Helpers
             {
                 var appData = ApplicationData.Current;
                 var roamingSettings = appData.RoamingSettings;
-                var roamingFolder = appData.RoamingFolder;
-                return true;
+                return roamingSettings.Values.ContainsKey(GAME_IN_PROGRESS);
             }
+        }
+
+        internal static void SetGameOver()
+        {
+            var appData = ApplicationData.Current;
+            var roamingSettings = appData.RoamingSettings;
+            roamingSettings.Values.Remove(GAME_IN_PROGRESS);
+        }
+
+        internal static void SetGameInProgress()
+        {
+            var appData = ApplicationData.Current;
+            var roamingSettings = appData.RoamingSettings;
+            roamingSettings.Values[GAME_IN_PROGRESS] = DateTime.Now.ToString();
         }
     }
 }

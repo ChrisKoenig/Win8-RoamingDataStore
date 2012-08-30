@@ -99,6 +99,32 @@ namespace Mastermind.ViewModels
 
         public RelayCommand SubmitGuessCommand { get; private set; }
 
+        public bool GameLocked
+        {
+            get
+            {
+                return _GameLocked;
+            }
+            set
+            {
+                _GameLocked = value;
+                RaisePropertyChanged(() => this.GameLocked);
+            }
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return _IsBusy;
+            }
+            set
+            {
+                _IsBusy = value;
+                RaisePropertyChanged(() => IsBusy);
+            }
+        }
+        
         public MainViewModel()
         {
             Moves = new ObservableCollection<PlayerMoveViewModel>();
@@ -217,39 +243,14 @@ namespace Mastermind.ViewModels
 
         private void SaveGameState()
         {
+            StorageHelper.SetGameInProgress();
             StorageHelper.SaveObjectToRoamingFolder(STR_Gamejson, _game);
             StorageHelper.SaveObjectToRoamingFolder(STR_Movesjson, Moves);
-            StorageHelper.PutObjectToSetting<string>("GameInProgress", DateTime.Now.ToString(DATE_FORMAT));
             StorageHelper.PutObjectToSetting<string>("MoveSlotOne", MoveSlotOne);
             StorageHelper.PutObjectToSetting<string>("MoveSlotTwo", MoveSlotTwo);
             StorageHelper.PutObjectToSetting<string>("MoveSlotThree", MoveSlotThree);
             StorageHelper.PutObjectToSetting<string>("MoveSlotFour", MoveSlotFour);
         }
 
-        public bool GameLocked
-        {
-            get
-            {
-                return _GameLocked;
-            }
-            set
-            {
-                _GameLocked = value;
-                RaisePropertyChanged(() => this.GameLocked);
-            }
-        }
-
-        public bool IsBusy
-        {
-            get
-            {
-                return _IsBusy;
-            }
-            set
-            {
-                _IsBusy = value;
-                RaisePropertyChanged(() => IsBusy);
-            }
-        }
     }
 }
