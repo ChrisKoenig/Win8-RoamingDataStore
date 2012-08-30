@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using Mastermind.Helpers;
 using Mastermind.Messages;
 using System;
 using System.Collections.Generic;
@@ -30,22 +31,20 @@ namespace Mastermind
             this.InitializeComponent();
             Messenger.Default.Register<VictoryMessage>(this, (message) => ShowVictory());
             Messenger.Default.Register<FailureMessage>(this, (message) => ShowFailure());
+            Messenger.Default.Register<ErrorLoadingGameMessage>(this, (message) => ShowError(message.Error));
+        }
+
+        private void ShowError(Exception exception)
+        {
+            UICommand okCommand = new UICommand("OK", (cmd) =>
+            {
+                Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
+            }, 1);
+            ShowMessage("Error loading game", exception.Message, new UICommand[] { okCommand });
         }
 
         private void ShowFailure()
         {
-            ShowMessage("You Lost!");
-        }
-
-        private void ShowVictory()
-        {
-            ShowMessage("You Won!");
-        }
-
-        private async void ShowMessage(string message)
-        {
-            var dialog = new MessageDialog("You Lost!  Close to start a new game", "You Lost!");
-
             UICommand newCommand = new UICommand("Start New Game", (cmd) =>
             {
                 Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
@@ -56,9 +55,32 @@ namespace Mastermind
                 App.Current.Exit();
             }, 2);
 
-            dialog.Commands.Add(newCommand);
-            dialog.Commands.Add(exitCommand);
-            dialog.DefaultCommandIndex = 1;
+            ShowMessage("You Lost!", "Would you like to play again?", new UICommand[] { newCommand, exitCommand });
+        }
+
+        private void ShowVictory()
+        {
+            UICommand newCommand = new UICommand("Start New Game", (cmd) =>
+            {
+                Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
+            }, 1);
+
+            UICommand exitCommand = new UICommand("Exit Mastermind", (cmd) =>
+            {
+                App.Current.Exit();
+            }, 2);
+
+            ShowMessage("You Won!", "Would you like to play again?", new UICommand[] { newCommand, exitCommand });
+        }
+
+        private async void ShowMessage(string title, string content, UICommand[] commands)
+        {
+            var dialog = new MessageDialog(content, title);
+
+            foreach (var command in commands)
+            {
+                dialog.Commands.Add(command);
+            }
 
             var result = await dialog.ShowAsync();
         }
@@ -70,6 +92,31 @@ namespace Mastermind
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            CheckForGameRestore();
+        }
+
+        private async void CheckForGameRestore()
+        {
+            if (!StorageHelper.GameInProgress)
+                return;
+
+            var dialog = new MessageDialog("There is currently a saved game in progress - would you like to continue?", "Game in Progress");
+
+            UICommand restoreCommand = new UICommand("Restore Game", (cmd) =>
+            {
+                Messenger.Default.Send<LoadSavedGameMessage>(new LoadSavedGameMessage());
+            }, 1);
+
+            UICommand newCommand = new UICommand("Start New Game", (cmd) =>
+            {
+                Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
+            }, 2);
+
+            dialog.Commands.Add(restoreCommand);
+            dialog.Commands.Add(newCommand);
+            dialog.DefaultCommandIndex = 1;
+
+            await dialog.ShowAsync();
         }
 
     }

@@ -16,6 +16,7 @@ namespace Mastermind.ViewModels
     {
         private const string STR_Gamejson = "game.json";
         private const string STR_Movesjson = "moves.json";
+        private const string DATE_FORMAT = "yyyy-M-dd hh:nn:ss";
 
         #region Backing Stores
 
@@ -116,8 +117,36 @@ namespace Mastermind.ViewModels
             ApplicationData.Current.DataChanged += DataChangeHandler;
 
             Messenger.Default.Register<StartNewGameMessage>(this, (message) => StartNewGame());
+            Messenger.Default.Register<LoadSavedGameMessage>(this, (message) => LoadSavedGame());
 
             StartNewGame();
+        }
+
+        private void LoadSavedGame()
+        {
+            LoadSavedGame(ApplicationData.Current);
+        }
+
+        private async void LoadSavedGame(ApplicationData appData)
+        {
+            try
+            {
+                _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
+                Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
+                MoveSlotOne = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
+                MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
+                MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
+                MoveSlotFour = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+            }
+            catch (Exception ex)
+            {
+                // show error message
+                ClearSavedGameState();
+                Messenger.Default.Send<ErrorLoadingGameMessage>(new ErrorLoadingGameMessage(ex));
+
+                // start new game
+                StartNewGame();
+            }
         }
 
         private void StartNewGame()
@@ -130,15 +159,10 @@ namespace Mastermind.ViewModels
             IsBusy = false;
         }
 
-        private async void DataChangeHandler(ApplicationData appData, object o)
+        private void DataChangeHandler(ApplicationData appData, object o)
         {
             IsBusy = true;
-            _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
-            Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
-            MoveSlotOne = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
-            MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
-            MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
-            MoveSlotFour = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+            LoadSavedGame(appData);
             IsBusy = false;
         }
 
@@ -162,13 +186,15 @@ namespace Mastermind.ViewModels
             GameLocked = true;
         }
 
-        private async void ClearSavedGameState()
+        private void ClearSavedGameState()
         {
             StorageHelper.ClearGameState();
         }
 
         private void SubmitGuess()
         {
+            IsBusy = true;
+
             var pvm = new PlayerMoveViewModel();
 
             var guess = new GameMove(
@@ -185,17 +211,19 @@ namespace Mastermind.ViewModels
             DispatcherHelper.CheckBeginInvokeOnUI(() => Moves.Add(pvm));
 
             SaveGameState();
+
+            IsBusy = false;
         }
 
         private void SaveGameState()
         {
-            var appData = ApplicationData.Current;
-            StorageHelper.SaveObjectToRoamingFolder(appData, STR_Gamejson, _game);
-            StorageHelper.SaveObjectToRoamingFolder(appData, STR_Movesjson, Moves);
-            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotOne", MoveSlotOne);
-            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotTwo", MoveSlotTwo);
-            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotThree", MoveSlotThree);
-            StorageHelper.PutObjectToSetting<string>(appData, "MoveSlotFour", MoveSlotFour);
+            StorageHelper.SaveObjectToRoamingFolder(STR_Gamejson, _game);
+            StorageHelper.SaveObjectToRoamingFolder(STR_Movesjson, Moves);
+            StorageHelper.PutObjectToSetting<string>("GameInProgress", DateTime.Now.ToString(DATE_FORMAT));
+            StorageHelper.PutObjectToSetting<string>("MoveSlotOne", MoveSlotOne);
+            StorageHelper.PutObjectToSetting<string>("MoveSlotTwo", MoveSlotTwo);
+            StorageHelper.PutObjectToSetting<string>("MoveSlotThree", MoveSlotThree);
+            StorageHelper.PutObjectToSetting<string>("MoveSlotFour", MoveSlotFour);
         }
 
         public bool GameLocked
