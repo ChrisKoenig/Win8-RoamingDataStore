@@ -21,7 +21,8 @@ namespace Mastermind.Helpers
         {
             StorageFile sampleFile = await appData.RoamingFolder.GetFileAsync(filename);
             String jsonData = await FileIO.ReadTextAsync(sampleFile);
-            return await JsonConvert.DeserializeObjectAsync<T>(jsonData);
+            var o = await JsonConvert.DeserializeObjectAsync<T>(jsonData);
+            return o;
         }
 
         public async static void SaveObjectToRoamingFolder(string filename, object o)

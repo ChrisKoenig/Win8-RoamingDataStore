@@ -33,16 +33,16 @@ namespace GameLogic.Tests
         public void ConvertCodeToColor()
         {
             string theCode = "R";
-            ColorSelection swatch = ColorSelection.FindColorSwatchByColorCode(theCode);
-            Assert.AreEqual<Color>(swatch.ColorColor, Colors.Red);
+            Color swatch = ColorSelection.GetColorForColorCode(theCode);
+            Assert.AreEqual<Color>(swatch, Colors.Red);
         }
 
         [TestMethod]
         public void ConvertNameToColor()
         {
             string theName = "Red";
-            ColorSelection swatch = ColorSelection.FindColorSwatchByColorName(theName);
-            Assert.AreEqual<Color>(swatch.ColorColor, Colors.Red);
+            Color swatch = ColorSelection.GetColorForColorName(theName);
+            Assert.AreEqual<Color>(swatch, Colors.Red);
         }
 
 
@@ -50,8 +50,8 @@ namespace GameLogic.Tests
         public void ConvertColorToCode()
         {
             Color theColor = Colors.Red;
-            ColorSelection swatch = ColorSelection.FindColorSwatchByColorColor(theColor);
-            Assert.AreEqual<string>(swatch.ColorCode, "R");
+            string swatch = ColorSelection.GetColorCodeForColor(theColor);
+            Assert.AreEqual<string>(swatch, "R");
         }
     }
 }

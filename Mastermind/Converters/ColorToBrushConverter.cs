@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,8 @@ namespace Mastermind.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var color = (Color)value;
+            var colorName = value.ToString();
+            var color = ColorSelection.GetColorForColorName(colorName);
             return new SolidColorBrush(color);
         }
 

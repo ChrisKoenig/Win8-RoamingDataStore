@@ -10,13 +10,14 @@ namespace GameLogic
 
         public string ColorCode { get; set; }
         public string ColorName { get; set; }
-        public Color ColorColor
-        {
-            get
-            {
-                return GameLogic.ColorHelper.GetColorFromName(ColorName);
-             }
-        }
+
+        //public Color ColorColor
+        //{
+        //    get
+        //    {
+        //        return GameLogic.ColorHelper.GetColorFromName(ColorName);
+        //    }
+        //}
 
         public static ColorSelection[] ColorSwatches = new ColorSelection[] {
                 new ColorSelection() { ColorCode = "R", ColorName = "Red"},
@@ -38,10 +39,10 @@ namespace GameLogic
             return ColorSwatches.Single(color => color.ColorName == name);
         }
 
-        public static ColorSelection FindColorSwatchByColorColor(Color color)
-        {
-            return ColorSwatches.Single(swatch => swatch.ColorColor.Equals(color));
-        }
+        //public static ColorSelection FindColorSwatchByColorColor(Color color)
+        //{
+        //    return ColorSwatches.Single(swatch => swatch.ColorColor.Equals(color));
+        //}
 
 
         public static string GetNextColor(string ColorCode)
@@ -67,5 +68,34 @@ namespace GameLogic
 
         }
 
+
+        public static Color GetColorForColorCode(string theCode)
+        {
+            var theSwatch = ColorSwatches.Single(swatch => swatch.ColorCode.Equals(theCode));
+            return GameLogic.ColorHelper.GetColorFromName(theSwatch.ColorName);
+        }
+
+        public static string GetColorNameForColor(Color theColor)
+        {
+            if (theColor == Colors.Red) return "Red";
+            if (theColor == Colors.Orange) return "Orange";
+            if (theColor == Colors.Yellow) return "Yellow";
+            if (theColor == Colors.Green) return "Green";
+            if (theColor == Colors.Blue) return "Blue";
+            if (theColor == Colors.White) return "White";
+            return "Pink";
+        }
+
+
+        public static string GetColorCodeForColor(Color theColor)
+        {
+            var name = GetColorNameForColor(theColor);
+            return name.Substring(0, 1);
+        }
+
+        public static Color GetColorForColorName(string theName)
+        {
+            return GameLogic.ColorHelper.GetColorFromName(theName);
+        }
     }
 }

@@ -11,6 +11,7 @@
     <Page.Resources>
         <converters:CodeToColorConverter x:Key="CodeToColorConverter" />
         <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+        
         <Style x:Key="MoveRectangle" TargetType="Rectangle">
             <Setter Property="RadiusX" Value="10" />
             <Setter Property="RadiusY" Value="10" />
@@ -61,10 +62,10 @@
                                 <RowDefinition />
                                 <RowDefinition Height="24" />
                             </Grid.RowDefinitions>
-                            <Rectangle Grid.Row="0" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[0].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
-                            <Rectangle Grid.Row="1" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[1].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
-                            <Rectangle Grid.Row="2" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[2].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
-                            <Rectangle Grid.Row="3" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[3].ColorColor, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Row="0" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[0].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Row="1" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[1].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Row="2" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[2].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Grid.Row="3" Style="{StaticResource MoveRectangle}" Fill="{Binding Path=MoveData.Slots[3].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
                             <ListBox Grid.Row="4" ItemsSource="{Binding Results}" Background="Transparent">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>

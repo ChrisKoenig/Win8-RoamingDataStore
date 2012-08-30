@@ -16,8 +16,8 @@ namespace Mastermind.Converters
         {
             // from code to color
             string theCode = value.ToString();
-            ColorSelection swatch = ColorSelection.FindColorSwatchByColorCode(theCode);
-            return new SolidColorBrush(swatch.ColorColor);
+            Color swatch = ColorSelection.GetColorForColorCode(theCode);
+            return new SolidColorBrush(swatch);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -25,8 +25,8 @@ namespace Mastermind.Converters
             // from color to code
             SolidColorBrush theBrush = (SolidColorBrush)value;
             Color theColor = theBrush.Color;
-            ColorSelection swatch = ColorSelection.FindColorSwatchByColorColor(theColor);
-            return swatch.ColorCode;
+            string  swatch = ColorSelection.GetColorCodeForColor(theColor);
+            return swatch;
         }
     }
 }

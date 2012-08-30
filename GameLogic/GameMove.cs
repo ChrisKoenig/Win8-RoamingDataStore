@@ -6,7 +6,7 @@ namespace GameLogic
 {
     public class GameMove
     {
-        private readonly ColorSelection[] _slots;
+        private ColorSelection[] _slots;
 
         public GameMove()
         {
@@ -22,6 +22,10 @@ namespace GameLogic
             get
             {
                 return _slots;
+            }
+            set
+            {
+                _slots = value;
             }
         }
     }
