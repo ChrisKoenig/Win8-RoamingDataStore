@@ -29,6 +29,7 @@ namespace Mastermind
         public MainPage()
         {
             this.InitializeComponent();
+            Messenger.Default.Register<AskForGameRestoreMessage>(this, (message) => AskForGameRestore());
             Messenger.Default.Register<VictoryMessage>(this, (message) => ShowVictory());
             Messenger.Default.Register<FailureMessage>(this, (message) => ShowFailure());
             Messenger.Default.Register<ErrorLoadingGameMessage>(this, (message) => ShowError(message.Error));
@@ -92,10 +93,10 @@ namespace Mastermind
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            CheckForGameRestore();
+            Messenger.Default.Send<GameBoardReadyMessage>(new GameBoardReadyMessage());
         }
 
-        private async void CheckForGameRestore()
+        private async void AskForGameRestore()
         {
             if (!StorageHelper.GameInProgress)
                 return;

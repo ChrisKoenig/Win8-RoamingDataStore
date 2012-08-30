@@ -7,41 +7,30 @@ namespace GameLogic
     public class Game
     {
 
-        public Game()
-        {
-        }
-
-        public Game(Action doVictory, Action doFailure)
-        {
-            InitBasicGame(doVictory, doFailure);
-            GenerateSolution();
-        }
-
-
-        internal Game(GameMove solution, Action doVictory, Action doFailure)
-            : this(doVictory, doFailure)
-        {
-            InitBasicGame(doVictory, doFailure);
-            _solution = solution;
-        }
-
-        private void InitBasicGame(Action doVictory, Action doFailure)
-        {
-            if (doVictory == null || doFailure == null)
-            {
-                throw new ArgumentException("Must supply values for both doVictory and doFailure");
-            }
-            doVictoryAction = doVictory;
-            doFailureAction = doFailure;
-            Moves = new List<GameMove>();
-        }
-
         public static int MAX_MOVES_ALLOWED = 12;
 
         private GameMove _solution;
-        private Action doVictoryAction;
-        private Action doFailureAction;
         public List<GameMove> Moves { get; set; }
+
+        public event EventHandler OnVictory;
+        public event EventHandler OnFailure;
+
+        public Game()
+        {
+            InitBasicGame();
+            GenerateSolution();
+        }
+
+        internal Game(GameMove solution)
+        {
+            InitBasicGame();
+            _solution = solution;
+        }
+
+        private void InitBasicGame()
+        {
+            Moves = new List<GameMove>();
+        }
 
         private void GenerateSolution()
         {
@@ -54,6 +43,39 @@ namespace GameLogic
                 ColorSelection.ColorSwatches[random.Next(0, max)]);
         }
 
+        public GameMoveResult RecordGuess(GameMove move)
+        {
+            Moves.Add(move);
+            var result = GameEngine.TestGuessAgainstSolution(move, _solution);
+            result.SequenceNumber = Moves.Count;
+            if (result.IsSolved)
+            {
+                if (OnVictory != null) OnVictory(this, new EventArgs());
+            }
+            else
+            {
+                if (Moves.Count >= Game.MAX_MOVES_ALLOWED)
+                {
+                    if (OnFailure != null) OnFailure(this, new EventArgs());
+                }
+            }
+            return result;
+        }
+
+        #region Properties 
+
+        public GameMove Solution
+        {
+            get
+            {
+                return _solution;
+            }
+            set
+            {
+                _solution = value;
+            }
+        }
+
         public int NumberOfMovesLeft
         {
             get
@@ -62,23 +84,6 @@ namespace GameLogic
             }
         }
 
-        public GameMoveResult RecordGuess(GameMove move)
-        {
-            Moves.Add(move);
-            var result = GameEngine.TestGuessAgainstSolution(move, _solution);
-            result.SequenceNumber = Moves.Count;
-            if (result.IsSolved)
-            {
-                doVictoryAction.Invoke();
-            }
-            else
-            {
-                if (Moves.Count >= Game.MAX_MOVES_ALLOWED)
-                {
-                    doFailureAction.Invoke();
-                }
-            }
-            return result;
-        }
+        #endregion 
     }
 }

@@ -31,9 +31,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Red"),
                 ColorSelection.FindColorSwatchByColorName("White"));
 
-            var game = GameEngine.CreateSampleGame(_solution,
-                           () => OnVictoryFlag = true,
-                           () => OnFailureFlag = true);
+            var game = GameEngine.CreateSampleGame(_solution);
+            game.OnVictory += (s,e) => OnVictoryFlag = true;
+            game.OnFailure += (s,e) => OnFailureFlag = true;
 
             var result = game.RecordGuess(_guess);
 
@@ -64,9 +64,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Blue"),
                 ColorSelection.FindColorSwatchByColorName("Blue"));
 
-            var game = GameEngine.CreateSampleGame(_solution,
-                           () => OnVictoryFlag = true,
-                           () => OnFailureFlag = true);
+            var game = GameEngine.CreateSampleGame(_solution);
+            game.OnVictory += (s, e) => OnVictoryFlag = true;
+            game.OnFailure += (s, e) => OnFailureFlag = true;
 
             GameMoveResult result = new GameMoveResult();
 

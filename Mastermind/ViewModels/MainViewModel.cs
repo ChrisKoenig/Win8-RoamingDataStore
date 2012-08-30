@@ -26,10 +26,24 @@ namespace Mastermind.ViewModels
         private string _MoveSlotThree;
         private string _MoveSlotTwo;
         private string _MoveSlotOne;
+        private ObservableCollection<PlayerMoveViewModel> _Moves = new ObservableCollection<PlayerMoveViewModel>();
 
         #endregion Backing Stores
 
         #region MoveSlot Properties
+
+        public ObservableCollection<PlayerMoveViewModel> Moves
+        {
+            get
+            {
+                return _Moves;
+            }
+            set
+            {
+                _Moves = value;
+                RaisePropertyChanged(() => this.Moves);
+            }
+        }
 
         public string MoveSlotOne
         {
@@ -95,8 +109,6 @@ namespace Mastermind.ViewModels
 
         private Game _game;
 
-        public ObservableCollection<PlayerMoveViewModel> Moves { get; private set; }
-
         public RelayCommand SubmitGuessCommand { get; private set; }
 
         public bool GameLocked
@@ -127,7 +139,6 @@ namespace Mastermind.ViewModels
         
         public MainViewModel()
         {
-            Moves = new ObservableCollection<PlayerMoveViewModel>();
             SubmitGuessCommand = new RelayCommand(() => SubmitGuess());
 
             MoveSlotOne = "R";
@@ -144,8 +155,17 @@ namespace Mastermind.ViewModels
 
             Messenger.Default.Register<StartNewGameMessage>(this, (message) => StartNewGame());
             Messenger.Default.Register<LoadSavedGameMessage>(this, (message) => LoadSavedGame());
+            Messenger.Default.Register<GameBoardReadyMessage>(this, (message) => {
+                if (StorageHelper.GameInProgress)
+                {
+                    Messenger.Default.Send<AskForGameRestoreMessage>(new AskForGameRestoreMessage());
+                }
+                else
+                {
+                    StartNewGame();
+                }
+            });
 
-            StartNewGame();
         }
 
         private void LoadSavedGame()
@@ -158,7 +178,14 @@ namespace Mastermind.ViewModels
             try
             {
                 _game = await StorageHelper.GetObjectFromRoamingFolder<Game>(appData, STR_Gamejson);
-                Moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
+                _game.OnFailure += _game_OnFailure;
+                _game.OnVictory += _game_OnVictory;
+                Moves.Clear();
+                var moves = await StorageHelper.GetObjectFromRoamingFolder<ObservableCollection<PlayerMoveViewModel>>(appData, STR_Movesjson);
+                foreach (var move in moves)
+                {
+                    Moves.Add(move);
+                }
                 MoveSlotOne = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotOne");
                 MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
                 MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
@@ -175,11 +202,25 @@ namespace Mastermind.ViewModels
             }
         }
 
+        void _game_OnVictory(object sender, EventArgs e)
+        {
+            ClearSavedGameState();
+            Messenger.Default.Send<VictoryMessage>(new VictoryMessage());
+            GameLocked = true;
+        }
+
+        void _game_OnFailure(object sender, EventArgs e)
+        {
+            ClearSavedGameState();
+            Messenger.Default.Send<FailureMessage>(new FailureMessage());
+            GameLocked = true;
+        }
+
         private void StartNewGame()
         {
             IsBusy = true;
             ClearSavedGameState();
-            _game = GameEngine.CreateRandomGame(OnVictory, OnFailure);
+            _game = GameEngine.CreateRandomGame();
             Moves.Clear();
             SaveGameState();
             IsBusy = false;
@@ -196,20 +237,6 @@ namespace Mastermind.ViewModels
         {
             string newColor = ColorSelection.GetNextColor(ColorCode);
             return newColor;
-        }
-
-        private void OnVictory()
-        {
-            ClearSavedGameState();
-            Messenger.Default.Send<VictoryMessage>(new VictoryMessage());
-            GameLocked = true;
-        }
-
-        private void OnFailure()
-        {
-            ClearSavedGameState();
-            Messenger.Default.Send<FailureMessage>(new FailureMessage());
-            GameLocked = true;
         }
 
         private void ClearSavedGameState()

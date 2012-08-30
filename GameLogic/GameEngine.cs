@@ -54,14 +54,14 @@ namespace GameLogic
             return '+';
         }
 
-        public static Game CreateSampleGame(GameMove solution, Action doVictory, Action doFailure)
+        public static Game CreateSampleGame(GameMove solution)
         {
-            return new Game(solution, doVictory, doFailure);
+            return new Game(solution);
         }
 
-        public static Game CreateRandomGame(Action doVictory, Action doFailure)
+        public static Game CreateRandomGame()
         {
-            return new Game(doVictory, doFailure);
+            return new Game();
         }
 
     }
