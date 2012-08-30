@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -30,7 +31,17 @@ namespace Mastermind.Helpers
             var appData = ApplicationData.Current;
             string jsonData = await JsonConvert.SerializeObjectAsync(o);
             StorageFile sampleFile = await appData.RoamingFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(sampleFile, jsonData);
+            try
+            {
+                await FileIO.WriteTextAsync(sampleFile, jsonData);
+            }
+            catch (FileNotFoundException fnfe)
+            {
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static T GetObjectFromSetting<T>(string setting)

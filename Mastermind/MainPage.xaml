@@ -44,6 +44,7 @@
                 <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonThree" Background="{Binding MoveSlotThree, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonThreeCommand}" />
                 <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonFour" Background="{Binding MoveSlotFour, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonFourCommand}" />
                 <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuessCommand}"/>
+                <Button Style="{StaticResource SubmitButton}" x:Name="NewGameButton" Content="Start New Game" Command="{Binding StartNewGameCommand}"/>
             </StackPanel>
 
             <ListBox x:Name="GameHistory" ItemsSource="{Binding Moves}" Background="SlateGray">

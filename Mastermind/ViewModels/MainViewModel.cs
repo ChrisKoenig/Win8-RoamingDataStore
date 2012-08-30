@@ -109,7 +109,10 @@ namespace Mastermind.ViewModels
 
         private Game _game;
 
+        #region Properties
+
         public RelayCommand SubmitGuessCommand { get; private set; }
+        public RelayCommand StartNewGameCommand { get; private set; }
 
         public bool GameLocked
         {
@@ -136,10 +139,13 @@ namespace Mastermind.ViewModels
                 RaisePropertyChanged(() => IsBusy);
             }
         }
-        
+
+        #endregion
+
         public MainViewModel()
         {
             SubmitGuessCommand = new RelayCommand(() => SubmitGuess());
+            StartNewGameCommand = new RelayCommand(() => StartNewGame());
 
             MoveSlotOne = "R";
             MoveSlotTwo = "R";
