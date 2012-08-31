@@ -11,7 +11,10 @@
     <Page.Resources>
         <converters:CodeToColorConverter x:Key="CodeToColorConverter" />
         <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
-        
+        <Style x:Key="WrappedTextBlock" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
         <Style x:Key="MoveRectangle" TargetType="Rectangle">
             <Setter Property="RadiusX" Value="10" />
             <Setter Property="RadiusY" Value="10" />
@@ -19,15 +22,22 @@
             <Setter Property="Width" Value="36" />
             <Setter Property="Height" Value="36" />
         </Style>
+        <Style x:Key="SolutionRectangle" TargetType="Rectangle">
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+        </Style>
         <Style TargetType="Button" x:Key="GuessButton">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Width" Value="173" />
             <Setter Property="Height" Value="173" />
-            <Setter Property="Margin" Value="10" />
+            <Setter Property="Margin" Value="5,0,10,0" />
         </Style>
         <Style TargetType="Button" x:Key="SubmitButton" 
                BasedOn="{StaticResource GuessButton}">
             <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
     </Page.Resources>
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
@@ -38,15 +48,29 @@
                 <RowDefinition Height="250"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" x:Name="SelectionArea">
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonOne" Background="{Binding MoveSlotOne, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonOneCommand}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonTwo" Background="{Binding MoveSlotTwo, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonTwoCommand}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonThree" Background="{Binding MoveSlotThree, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonThreeCommand}" />
-                <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonFour" Background="{Binding MoveSlotFour, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonFourCommand}" />
-                <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Content="Submit" Command="{Binding SubmitGuessCommand}"/>
-                <Button Style="{StaticResource SubmitButton}" x:Name="NewGameButton" Content="Start New Game" Command="{Binding StartNewGameCommand}"/>
-            </StackPanel>
-
+            <Grid Grid.Row="1">
+                <StackPanel Orientation="Horizontal" x:Name="SelectionArea">
+                    <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonOne" Background="{Binding MoveSlotOne, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonOneCommand}" />
+                    <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonTwo" Background="{Binding MoveSlotTwo, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonTwoCommand}" />
+                    <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonThree" Background="{Binding MoveSlotThree, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonThreeCommand}" />
+                    <Button Style="{StaticResource GuessButton}" x:Name="SelectorButtonFour" Background="{Binding MoveSlotFour, Converter={StaticResource CodeToColorConverter}}" Command="{Binding ToggleButonFourCommand}" />
+                    <Button Style="{StaticResource SubmitButton}" x:Name="SubmitButton" Command="{Binding SubmitGuessCommand}">
+                        <TextBlock Style="{StaticResource WrappedTextBlock}">Submit Guess</TextBlock>
+                    </Button>
+                    <Button Style="{StaticResource SubmitButton}" x:Name="NewGameButton" Command="{Binding StartNewGameCommand}">
+                        <TextBlock Style="{StaticResource WrappedTextBlock}">Start New Game</TextBlock>
+                    </Button>
+                    <StackPanel Height="173" HorizontalAlignment="Stretch">
+                        <Button Content="Show Solution" Command="{Binding ToggleSolutionVisibilityCommand}" HorizontalAlignment="Stretch"/>
+                        <StackPanel Visibility="{Binding SolutionVisibility}">
+                            <Rectangle Style="{StaticResource SolutionRectangle}" Fill="{Binding CurrentGame.Solution.Slots[0].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Style="{StaticResource SolutionRectangle}" Fill="{Binding CurrentGame.Solution.Slots[1].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Style="{StaticResource SolutionRectangle}" Fill="{Binding CurrentGame.Solution.Slots[2].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                            <Rectangle Style="{StaticResource SolutionRectangle}" Fill="{Binding CurrentGame.Solution.Slots[3].ColorName, Converter={StaticResource ColorToBrushConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
             <ListBox x:Name="GameHistory" ItemsSource="{Binding Moves}" Background="SlateGray">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

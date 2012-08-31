@@ -1,21 +1,12 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using System;
+using System.Linq;
+using Windows.UI.Popups;
 using Mastermind.Helpers;
 using Mastermind.Messages;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Navigation;
+using GalaSoft.MvvmLight.Messaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -41,6 +32,7 @@ namespace Mastermind
             {
                 Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
             }, 1);
+
             ShowMessage("Error loading game", exception.Message, new UICommand[] { okCommand });
         }
 
@@ -83,7 +75,7 @@ namespace Mastermind
                 dialog.Commands.Add(command);
             }
 
-            var result = await dialog.ShowAsync();
+            await dialog.ShowAsync();
         }
 
         /// <summary>

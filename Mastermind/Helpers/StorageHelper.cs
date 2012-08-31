@@ -26,22 +26,13 @@ namespace Mastermind.Helpers
             return o;
         }
 
-        public async static void SaveObjectToRoamingFolder(string filename, object o)
+        public async static Task<bool> SaveObjectToRoamingFolder(string filename, object o)
         {
             var appData = ApplicationData.Current;
             string jsonData = await JsonConvert.SerializeObjectAsync(o);
             StorageFile sampleFile = await appData.RoamingFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            try
-            {
-                await FileIO.WriteTextAsync(sampleFile, jsonData);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-            }
-            catch
-            {
-                throw;
-            }
+            await FileIO.WriteTextAsync(sampleFile, jsonData);
+            return true;
         }
 
         public static T GetObjectFromSetting<T>(string setting)
