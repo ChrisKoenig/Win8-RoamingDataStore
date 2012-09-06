@@ -1,23 +1,15 @@
-﻿using GalaSoft.MvvmLight.Threading;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
+using Windows.ApplicationModel;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using System.Collections.Generic;
+using GalaSoft.MvvmLight.Threading;
+using Windows.ApplicationModel.Activation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
-namespace Mastermind
+namespace RoamingDataStore
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

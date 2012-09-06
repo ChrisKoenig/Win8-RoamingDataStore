@@ -1,9 +1,9 @@
 ﻿<Application
-    x:Class="Mastermind.App"
+    x:Class="RoamingDataStore.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Mastermind"
-    xmlns:vm="using:Mastermind.ViewModels">
+    xmlns:local="using:RoamingDataStore"
+    xmlns:vm="using:RoamingDataStore.ViewModels">
 
     <Application.Resources>
         <ResourceDictionary>

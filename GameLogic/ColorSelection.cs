@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Windows.UI;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
@@ -10,14 +10,6 @@ namespace GameLogic
 
         public string ColorCode { get; set; }
         public string ColorName { get; set; }
-
-        //public Color ColorColor
-        //{
-        //    get
-        //    {
-        //        return GameLogic.ColorHelper.GetColorFromName(ColorName);
-        //    }
-        //}
 
         public static ColorSelection[] ColorSwatches = new ColorSelection[] {
                 new ColorSelection() { ColorCode = "R", ColorName = "Red"},
@@ -38,12 +30,6 @@ namespace GameLogic
         {
             return ColorSwatches.Single(color => color.ColorName == name);
         }
-
-        //public static ColorSelection FindColorSwatchByColorColor(Color color)
-        //{
-        //    return ColorSwatches.Single(swatch => swatch.ColorColor.Equals(color));
-        //}
-
 
         public static string GetNextColor(string ColorCode)
         {

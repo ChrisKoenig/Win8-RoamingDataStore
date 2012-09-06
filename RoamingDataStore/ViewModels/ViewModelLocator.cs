@@ -1,11 +1,9 @@
-﻿using GalaSoft.MvvmLight.Ioc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Ioc;
+using System.Collections.Generic;
 
-namespace Mastermind.ViewModels
+namespace RoamingDataStore.ViewModels
 {
     public class ViewModelLocator
     {

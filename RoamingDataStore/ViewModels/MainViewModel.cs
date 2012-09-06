@@ -1,16 +1,17 @@
 ﻿using System;
 using GameLogic;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using GalaSoft.MvvmLight;
-using Mastermind.Helpers;
-using Mastermind.Messages;
+using System.Threading.Tasks;
+using RoamingDataStore.Helpers;
+using RoamingDataStore.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml;
 
-namespace Mastermind.ViewModels
+namespace RoamingDataStore.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
@@ -140,6 +141,8 @@ namespace Mastermind.ViewModels
             ToggleButonThreeCommand = new RelayCommand(() => MoveSlotThree = CycleColor(MoveSlotThree));
             ToggleButonFourCommand = new RelayCommand(() => MoveSlotFour = CycleColor(MoveSlotFour));
 
+            SolutionVisibility = Visibility.Collapsed;
+
             ApplicationData.Current.DataChanged += DataChangeHandler;
 
             Messenger.Default.Register<StartNewGameMessage>(this, (message) => StartNewGame());
@@ -180,6 +183,7 @@ namespace Mastermind.ViewModels
                 MoveSlotTwo = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotTwo");
                 MoveSlotThree = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotThree");
                 MoveSlotFour = StorageHelper.GetObjectFromSetting<string>(appData, "MoveSlotFour");
+                SolutionVisibility = Visibility.Collapsed;
             }
             catch (Exception ex)
             {
@@ -207,11 +211,11 @@ namespace Mastermind.ViewModels
         private void StartNewGame()
         {
             ClearSavedGameState();
-            
+
             CurrentGame = GameEngine.CreateRandomGame();
             CurrentGame.OnFailure += _game_OnFailure;
             CurrentGame.OnVictory += _game_OnVictory;
-            
+
             Moves.Clear();
 
             SolutionVisibility = Visibility.Collapsed;
@@ -260,19 +264,28 @@ namespace Mastermind.ViewModels
 
             DispatcherHelper.CheckBeginInvokeOnUI(() => Moves.Add(pvm));
 
-            SaveGameState();
+            if (!CurrentGame.IsSolved)
+                SaveGameState();
 
         }
 
         private async void SaveGameState()
         {
-            StorageHelper.SetGameInProgress();
-            await StorageHelper.SaveObjectToRoamingFolder(STR_Gamejson, _game);
-            await StorageHelper.SaveObjectToRoamingFolder(STR_Movesjson, Moves);
-            StorageHelper.PutObjectToSetting<string>("MoveSlotOne", MoveSlotOne);
-            StorageHelper.PutObjectToSetting<string>("MoveSlotTwo", MoveSlotTwo);
-            StorageHelper.PutObjectToSetting<string>("MoveSlotThree", MoveSlotThree);
-            StorageHelper.PutObjectToSetting<string>("MoveSlotFour", MoveSlotFour);
+            try
+            {
+                StorageHelper.SetGameInProgress();
+                await StorageHelper.SaveObjectToRoamingFolder(STR_Gamejson, _game);
+                await StorageHelper.SaveObjectToRoamingFolder(STR_Movesjson, Moves);
+                StorageHelper.PutObjectToSetting<string>("MoveSlotOne", MoveSlotOne);
+                StorageHelper.PutObjectToSetting<string>("MoveSlotTwo", MoveSlotTwo);
+                StorageHelper.PutObjectToSetting<string>("MoveSlotThree", MoveSlotThree);
+                StorageHelper.PutObjectToSetting<string>("MoveSlotFour", MoveSlotFour);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                var t = new Task(() => SaveGameState());
+                t.Start();
+            }
         }
 
         private void ToggleSolutionVisibility()

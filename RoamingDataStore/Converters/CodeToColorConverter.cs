@@ -1,20 +1,19 @@
-﻿using GameLogic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using GameLogic;
 using Windows.UI;
+using System.Linq;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
+using System.Collections.Generic;
 
-namespace Mastermind.Converters
+namespace RoamingDataStore.Converters
 {
     class CodeToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             // from code to color
+            if (value == null) return new SolidColorBrush(Colors.Purple);
             string theCode = value.ToString();
             Color swatch = ColorSelection.GetColorForColorCode(theCode);
             return new SolidColorBrush(swatch);

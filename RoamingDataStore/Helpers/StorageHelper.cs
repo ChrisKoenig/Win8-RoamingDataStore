@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Windows.Storage;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
-namespace Mastermind.Helpers
+namespace RoamingDataStore.Helpers
 {
     public class StorageHelper
     {
-        private static string GAME_IN_PROGRESS = "GAME_IN_PROGRESS";
-
         public async static Task<T> GetObjectFromRoamingFolder<T>(string filename)
         {
             return await GetObjectFromRoamingFolder<T>(ApplicationData.Current, filename);
@@ -60,10 +57,10 @@ namespace Mastermind.Helpers
             var appData = ApplicationData.Current;
             try
             {
-                foreach (var item in appData.RoamingSettings.Values)
-                {
-                    appData.RoamingSettings.Values.Remove(item.Key);
-                }
+                //foreach (var item in appData.RoamingSettings.Values)
+                //{
+                //    appData.RoamingSettings.Values.Remove(item.Key);
+                //}
                 var files = await appData.RoamingFolder.GetFilesAsync();
                 foreach (var file in files)
                 {
@@ -82,7 +79,7 @@ namespace Mastermind.Helpers
             {
                 var appData = ApplicationData.Current;
                 var roamingSettings = appData.RoamingSettings;
-                return roamingSettings.Values.ContainsKey(GAME_IN_PROGRESS);
+                return roamingSettings.Values.ContainsKey("GAME_IN_PROGRESS");
             }
         }
 
@@ -90,14 +87,14 @@ namespace Mastermind.Helpers
         {
             var appData = ApplicationData.Current;
             var roamingSettings = appData.RoamingSettings;
-            roamingSettings.Values.Remove(GAME_IN_PROGRESS);
+            roamingSettings.Values.Remove("GAME_IN_PROGRESS");
         }
 
         internal static void SetGameInProgress()
         {
             var appData = ApplicationData.Current;
             var roamingSettings = appData.RoamingSettings;
-            roamingSettings.Values[GAME_IN_PROGRESS] = DateTime.Now.ToString();
+            roamingSettings.Values["GAME_IN_PROGRESS"] = DateTime.Now.ToString();
         }
     }
 }

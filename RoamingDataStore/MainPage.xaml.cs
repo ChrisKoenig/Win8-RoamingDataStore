@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using Windows.UI.Popups;
-using Mastermind.Helpers;
-using Mastermind.Messages;
+using RoamingDataStore.Helpers;
 using Windows.UI.Xaml.Controls;
+using RoamingDataStore.Messages;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Mastermind
+namespace RoamingDataStore
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -43,7 +43,7 @@ namespace Mastermind
                 Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
             }, 1);
 
-            UICommand exitCommand = new UICommand("Exit Mastermind", (cmd) =>
+            UICommand exitCommand = new UICommand("Exit Game", (cmd) =>
             {
                 App.Current.Exit();
             }, 2);
@@ -58,7 +58,7 @@ namespace Mastermind
                 Messenger.Default.Send<StartNewGameMessage>(new StartNewGameMessage());
             }, 1);
 
-            UICommand exitCommand = new UICommand("Exit Mastermind", (cmd) =>
+            UICommand exitCommand = new UICommand("Exit Game", (cmd) =>
             {
                 App.Current.Exit();
             }, 2);

@@ -1,14 +1,11 @@
-﻿using GameLogic;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using GameLogic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
+using System.Collections.Generic;
 
-namespace Mastermind.Converters
+namespace RoamingDataStore.Converters
 {
     class ColorToBrushConverter : IValueConverter
     {

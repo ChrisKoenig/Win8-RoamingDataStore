@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
@@ -50,10 +50,12 @@ namespace GameLogic
             result.SequenceNumber = Moves.Count;
             if (result.IsSolved)
             {
+                IsSolved = true;
                 if (OnVictory != null) OnVictory(this, new EventArgs());
             }
             else
             {
+                IsSolved = false;
                 if (Moves.Count >= Game.MAX_MOVES_ALLOWED)
                 {
                     if (OnFailure != null) OnFailure(this, new EventArgs());
@@ -85,5 +87,7 @@ namespace GameLogic
         }
 
         #endregion 
+    
+        public bool IsSolved { get; set; }
     }
 }

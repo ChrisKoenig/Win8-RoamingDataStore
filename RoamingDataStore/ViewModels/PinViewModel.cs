@@ -1,13 +1,9 @@
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Threading;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Media;
+using GalaSoft.MvvmLight;
+using System.Collections.Generic;
 
-namespace Mastermind.ViewModels
+namespace RoamingDataStore.ViewModels
 {
     public class PinViewModel : ObservableObject
     {

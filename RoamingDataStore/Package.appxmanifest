@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="4ecabfb5-b4e5-47d5-9b6b-8b410152ca4f" Publisher="CN=chkoenig" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>RoamingDataStore</DisplayName>
+    <PublisherDisplayName>chkoenig</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2.1</OSMinVersion>
+    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="RoamingDataStore.App">
+      <VisualElements DisplayName="RoamingDataStore" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="RoamingDataStore" ForegroundText="light" BackgroundColor="#464646">
+        <DefaultTile ShowName="allLogos" />
+        <SplashScreen Image="Assets\SplashScreen.png" />
+      </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

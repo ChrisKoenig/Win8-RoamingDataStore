@@ -1,13 +1,11 @@
-using GalaSoft.MvvmLight;
-using GameLogic;
 using System;
+using GameLogic;
+using System.Linq;
+using GalaSoft.MvvmLight;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Windows.UI;
-using Windows.UI.Xaml.Media;
 
-namespace Mastermind.ViewModels
+namespace RoamingDataStore.ViewModels
 {
     public class PlayerMoveViewModel : ObservableObject
     {

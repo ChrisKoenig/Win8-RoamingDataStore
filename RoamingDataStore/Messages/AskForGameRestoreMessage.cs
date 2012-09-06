@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Collections.Generic;
 
-namespace Mastermind.Messages
+namespace RoamingDataStore.Messages
 {
     public class AskForGameRestoreMessage
     {

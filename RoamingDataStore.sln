@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{0D680F10-D81B-4632-B764-6BB63428D469}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mastermind", "Mastermind\Mastermind.csproj", "{F17048A5-1BF2-4192-858B-93CF5320B51E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoamingDataStore", "RoamingDataStore\RoamingDataStore.csproj", "{F17048A5-1BF2-4192-858B-93CF5320B51E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
