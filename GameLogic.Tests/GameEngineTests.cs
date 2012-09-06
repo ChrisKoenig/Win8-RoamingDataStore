@@ -127,5 +127,31 @@ namespace GameLogic.Tests
             Assert.AreEqual<int>(2, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
         }
+
+
+        [TestMethod]
+        public void TestAllSameColorSolution()
+        {
+            GameMove _solution = new GameMove(
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Blue"));
+
+            GameMove _guess = new GameMove(
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Blue"),
+                ColorSelection.FindColorSwatchByColorName("Orange"),
+                ColorSelection.FindColorSwatchByColorName("Blue"));
+
+            var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
+
+            // just test the last one
+            Assert.AreEqual<int>(2, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(2, result.NumberOfEmpties, "Empties");
+
+        }
+
     }
 }

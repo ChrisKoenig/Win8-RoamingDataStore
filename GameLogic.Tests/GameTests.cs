@@ -13,7 +13,7 @@ namespace GameLogic.Tests
         private bool OnVictoryFlag = false;
         private bool OnFailureFlag = false;
 
-        
+
         [TestMethod]
         public void TestSampleGameSuccess()
         {
@@ -32,17 +32,17 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("White"));
 
             var game = GameEngine.CreateSampleGame(_solution);
-            game.OnVictory += (s,e) => OnVictoryFlag = true;
-            game.OnFailure += (s,e) => OnFailureFlag = true;
+            game.OnVictory += (s, e) => OnVictoryFlag = true;
+            game.OnFailure += (s, e) => OnFailureFlag = true;
 
             var result = game.RecordGuess(_guess);
 
             Assert.AreEqual<int>(4, result.NumberOfReds, "Reds");
             Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
             Assert.AreEqual<int>(0, result.NumberOfEmpties, "Empties");
-            Assert.IsTrue(result.IsSolved);
-            Assert.IsTrue(OnVictoryFlag);
-            Assert.IsFalse(OnFailureFlag);
+            Assert.IsTrue(result.IsSolved, "Solved");
+            Assert.IsTrue(OnVictoryFlag, "Victory");
+            Assert.IsFalse(OnFailureFlag, "Failure");
 
         }
 
@@ -73,18 +73,21 @@ namespace GameLogic.Tests
 
             for (int i = 0; i < Game.MAX_MOVES_ALLOWED; i++)
             {
-                result = game.RecordGuess(_guess);                
+                result = game.RecordGuess(_guess);
             }
 
             // just test the last one
             Assert.AreEqual<int>(1, result.NumberOfReds, "Reds");
             Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
             Assert.AreEqual<int>(3, result.NumberOfEmpties, "Empties");
-            Assert.IsFalse(result.IsSolved);
-            Assert.IsFalse(OnVictoryFlag);
-            Assert.IsTrue(OnFailureFlag);
+            Assert.IsFalse(result.IsSolved, "Solved");
+            Assert.IsFalse(OnVictoryFlag, "OnVictory");
+            Assert.IsTrue(OnFailureFlag, "OnFailure");
 
         }
-    
+
+
+
+
     }
 }

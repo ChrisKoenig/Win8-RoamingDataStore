@@ -14,9 +14,9 @@ namespace GameLogic
 
             for (int position = 0; position < theGuess.Slots.Count(); position++)
             {
-                // check the current slot against the corresponding color
                 var currentSlot = theGuess.Slots[position];
 
+                // check the current slot against the corresponding color
                 if (currentSlot.ColorCode == theSolution.Slots[position].ColorCode)
                 {
                     result.NumberOfReds++;
@@ -24,63 +24,30 @@ namespace GameLogic
                 }
                 else
                 {
-                    var index = Array.FindIndex<ColorSelection>(theSolution.Slots, (color) => color.ColorCode == currentSlot.ColorCode);
-                    if (index >= 0 && placeTracker[index] == null)
+                    // now check to see if you can find the corresponding color somewhere else
+                    int index = 0;
+                    while (index >= 0)
                     {
-                        result.NumberOfWhites++;
-                        placeTracker[index] = "W";
+                        index = Array.FindIndex<ColorSelection>(theSolution.Slots, index, (color) => color.ColorCode == currentSlot.ColorCode);
+                        if (index >= 0)
+                        {
+                            if (placeTracker[index] == null)
+                            {
+                                result.NumberOfWhites++;
+                                placeTracker[index] = "W";
+                                index = -1; // reset
+                            }
+                            else
+                            {
+                                // shift up one to increment the search
+                                index++;
+                            }
+                        }
                     }
                 }
             }
             result.NumberOfEmpties = theSolution.Slots.Count() - result.NumberOfReds - result.NumberOfWhites;
             return result;
-        }
-
-        public static GameMoveResult XTestGuessAgainstSolution(GameMove _guess, GameMove _solution)
-        {
-            // calculcate everything
-            GameMoveResult result = new GameMoveResult();
-            var _guessString = string.Join("", _guess.Slots.Select(s => s.ColorCode));
-            var _solutionString = string.Join("", _solution.Slots.Select(s => s.ColorCode));
-            var _check = XCheckGuess(_solutionString, _guessString);
-            result.NumberOfReds = _check.ToCharArray().Count(c => c == '+');
-            result.NumberOfWhites = _check.ToCharArray().Count(c => c == '-');
-            result.NumberOfEmpties = _check.ToCharArray().Count(c => c == 'X');
-            return result;
-        }
-
-        private static string XCheckGuess(string code, string guess)
-        {
-            char[] array = code.ToCharArray();
-            int num = 0;
-            char[] array2 = new char[]
-    	        {
-    		        'X',
-    		        'X',
-    		        'X',
-    		        'X'
-    	        };
-            for (int i = 0; i < 4; i++)
-            {
-                char guessChar = guess[i];
-                int num2 = Array.FindIndex<char>(array, (char codeChar) => codeChar == guessChar);
-                if (num2 > -1)
-                {
-                    array2[num] = GetMarker(num2, i);
-                    num++;
-                    array[num2] = 'X';
-                }
-            }
-            return new string(array2);
-        }
-
-        private static char GetMarker(int searchIndex, int guessIndex)
-        {
-            if (searchIndex != guessIndex)
-            {
-                return '-';
-            }
-            return '+';
         }
 
         public static Game CreateSampleGame(GameMove solution)
