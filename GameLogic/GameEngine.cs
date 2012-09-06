@@ -7,20 +7,49 @@ namespace GameLogic
     public class GameEngine
     {
 
-        public static GameMoveResult TestGuessAgainstSolution(GameMove _guess, GameMove _solution)
+        public static GameMoveResult TestGuessAgainstSolution(GameMove theGuess, GameMove theSolution)
+        {
+            var result = new GameMoveResult();
+            var placeTracker = new string[theGuess.Slots.Length];
+
+            for (int position = 0; position < theGuess.Slots.Count(); position++)
+            {
+                // check the current slot against the corresponding color
+                var currentSlot = theGuess.Slots[position];
+
+                if (currentSlot.ColorCode == theSolution.Slots[position].ColorCode)
+                {
+                    result.NumberOfReds++;
+                    placeTracker[position] = "R";
+                }
+                else
+                {
+                    var index = Array.FindIndex<ColorSelection>(theSolution.Slots, (color) => color.ColorCode == currentSlot.ColorCode);
+                    if (index >= 0 && placeTracker[index] == null)
+                    {
+                        result.NumberOfWhites++;
+                        placeTracker[index] = "W";
+                    }
+                }
+            }
+            result.NumberOfEmpties = theSolution.Slots.Count() - result.NumberOfReds - result.NumberOfWhites;
+            return result;
+        }
+
+        public static GameMoveResult XTestGuessAgainstSolution(GameMove _guess, GameMove _solution)
         {
             // calculcate everything
             GameMoveResult result = new GameMoveResult();
             var _guessString = string.Join("", _guess.Slots.Select(s => s.ColorCode));
             var _solutionString = string.Join("", _solution.Slots.Select(s => s.ColorCode));
-            var _check = CheckGuess(_solutionString, _guessString);
+            var _check = XCheckGuess(_solutionString, _guessString);
             result.NumberOfReds = _check.ToCharArray().Count(c => c == '+');
             result.NumberOfWhites = _check.ToCharArray().Count(c => c == '-');
             result.NumberOfEmpties = _check.ToCharArray().Count(c => c == 'X');
             return result;
         }
 
-        private static string CheckGuess(string code, string guess)
+        private static string XCheckGuess(string code, string guess)
         {
             char[] array = code.ToCharArray();
             int num = 0;

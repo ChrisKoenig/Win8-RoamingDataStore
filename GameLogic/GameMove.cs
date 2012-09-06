@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace GameLogic
 {
@@ -27,6 +28,16 @@ namespace GameLogic
             {
                 _slots = value;
             }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder(4);
+            foreach (var item in _slots)
+            {
+                sb.Append(item.ColorCode);
+            }
+            return sb.ToString();
         }
     }
 }

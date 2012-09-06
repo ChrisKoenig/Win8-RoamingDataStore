@@ -37,8 +37,9 @@ namespace GameLogic.Tests
 
             var result = game.RecordGuess(_guess);
 
-            Assert.AreEqual<int>(result.NumberOfReds, 4);
-            Assert.AreEqual<int>(result.NumberOfWhites, 0);
+            Assert.AreEqual<int>(4, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(0, result.NumberOfEmpties, "Empties");
             Assert.IsTrue(result.IsSolved);
             Assert.IsTrue(OnVictoryFlag);
             Assert.IsFalse(OnFailureFlag);
@@ -76,8 +77,9 @@ namespace GameLogic.Tests
             }
 
             // just test the last one
-            Assert.AreEqual<int>(result.NumberOfReds, 1);
-            Assert.AreEqual<int>(result.NumberOfWhites, 0);
+            Assert.AreEqual<int>(1, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(3, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
             Assert.IsFalse(OnVictoryFlag);
             Assert.IsTrue(OnFailureFlag);

@@ -22,8 +22,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Red"),
                 ColorSelection.FindColorSwatchByColorName("White"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 4);
-            Assert.AreEqual<int>(result.NumberOfWhites, 0);
+            Assert.AreEqual<int>(4, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(0, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(0, result.NumberOfEmpties, "Empties");
             Assert.IsTrue(result.IsSolved);
         }
 
@@ -41,9 +42,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Yellow"),
                 ColorSelection.FindColorSwatchByColorName("Red"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 2);
-            Assert.AreEqual<int>(result.NumberOfWhites, 1);
-            Assert.AreEqual<int>(result.NumberOfEmpties, 1);
+            Assert.AreEqual<int>(2, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(1, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(1, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
         }
 
@@ -61,9 +62,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Blue"),
                 ColorSelection.FindColorSwatchByColorName("Red"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 2);
-            Assert.AreEqual<int>(result.NumberOfWhites, 2);
-            Assert.AreEqual<int>(result.NumberOfEmpties, 0);
+            Assert.AreEqual<int>(2, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(2, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(0, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
         }
 
@@ -81,9 +82,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("White"),
                 ColorSelection.FindColorSwatchByColorName("Red"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 0);
-            Assert.AreEqual<int>(result.NumberOfWhites, 1);
-            Assert.AreEqual<int>(result.NumberOfEmpties, 3);
+            Assert.AreEqual<int>(0, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(1, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(3, result.NumberOfEmpties, "Blanks");
             Assert.IsFalse(result.IsSolved);
         }
 
@@ -101,9 +102,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Blue"),
                 ColorSelection.FindColorSwatchByColorName("Green"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 1);
-            Assert.AreEqual<int>(result.NumberOfWhites, 1);
-            Assert.AreEqual<int>(result.NumberOfEmpties, 2);
+            Assert.AreEqual<int>(1, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(1, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(2, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
         }
 
@@ -121,9 +122,9 @@ namespace GameLogic.Tests
                 ColorSelection.FindColorSwatchByColorName("Red"),
                 ColorSelection.FindColorSwatchByColorName("Yellow"));
             var result = GameEngine.TestGuessAgainstSolution(_guess, _solution);
-            Assert.AreEqual<int>(result.NumberOfReds, 1);
-            Assert.AreEqual<int>(result.NumberOfWhites, 1);
-            Assert.AreEqual<int>(result.NumberOfEmpties, 2);
+            Assert.AreEqual<int>(1, result.NumberOfReds, "Reds");
+            Assert.AreEqual<int>(1, result.NumberOfWhites, "Whites");
+            Assert.AreEqual<int>(2, result.NumberOfEmpties, "Empties");
             Assert.IsFalse(result.IsSolved);
         }
     }
